@@ -17,6 +17,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "pdf-player-v2": [
+        "dist/pdf-player-v2"
+      ],
+      "pdf-player-v2/*": [
+        "dist/pdf-player-v2/*"
+      ]
+    }
   }
 }
