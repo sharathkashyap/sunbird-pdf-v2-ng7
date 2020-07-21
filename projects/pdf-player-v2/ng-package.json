@@ -3,5 +3,8 @@
   "dest": "../../dist/pdf-player-v2",
   "lib": {
     "entryFile": "src/public_api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "ngx-extended-pdf-viewer"
+  ]
 }
