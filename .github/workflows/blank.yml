@@ -26,7 +26,7 @@ jobs:
 
     - name: Build pdf player library
       run: |
-        (ng build)
+        (npm run build)
 
     - name: Package pdf player library 
       run: |
