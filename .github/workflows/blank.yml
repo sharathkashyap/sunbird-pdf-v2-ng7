@@ -1,4 +1,4 @@
-# Github action configuration runs functional test cases and generate artifact's 
+# Github action configuration build and pack pdf library
 # Author: Rahul Shukla <rahul.shukla@ilimi.in>
 
 
