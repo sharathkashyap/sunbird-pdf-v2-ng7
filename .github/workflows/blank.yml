@@ -36,7 +36,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: Library generation
-        path: dist/pdf-player-v2/pdf-player-v2-0.0.1.tgz
+        path: dist/pdf-player-v2
 
       env:
         CI: true
