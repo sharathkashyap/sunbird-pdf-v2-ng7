@@ -1,3 +1,4 @@
+![Sunbird-PDF-Player](https://github.com/rahulshukla/sunbird-pdf-v2-ng7/workflows/Sunbird-PDF-Player/badge.svg)
 # SunbirdPdfPlayer
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.2.
