@@ -32,7 +32,7 @@ jobs:
       run: |
         (cd dist/pdf-player-v2 && npm pack)
     
-    - name: Report artifact generation
+    - name: Library artifact generation
       uses: actions/upload-artifact@v1
       with:
         name: Library generation
