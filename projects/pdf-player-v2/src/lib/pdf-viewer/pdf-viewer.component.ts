@@ -73,7 +73,7 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
     this.currentPagePointer = event.pageNumber;
     const tags = {
       'page' : this.currentPagePointer,
-      'timeStamp' : new Date().getTime() - this.pdfLastPageTime
+      'spentTime' : new Date().getTime() - this.pdfLastPageTime
     };
     this.visits.push (tags);
     this.pdfLastPageTime = new Date().getTime();

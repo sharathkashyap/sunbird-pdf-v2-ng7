@@ -1,27 +1,114 @@
-# SunbirdPdfV2Ng7
+# SunbirdPdfPlayer
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.0.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.2.
 
-## Development server
+## Common angular components for Sunbird PDF Player!
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+This library provides an embeddable PDF viewer component which internally usages  Pdf Js.
 
-## Code scaffolding
+### Getting Started
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+###### Step 1 : Clone the Project and install necessary dependencies of the Project by following steps:  
 
-## Build
+    npm install 
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+###### Step 2 : Run ng build to build the project.
 
-## Running unit tests
+    ng build
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+    The build artifacts will be stored in the dist/pdf-player-v2.
 
-## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+### Using the Sunbird-PDF-Player in your Project 
 
-## Further help
+For help getting started with a new Angular app, check out the Angular CLI.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+For existing apps, follow these steps to begin using .
+
+###### Step 1: Install the following packages
+
+ 1. For Development 
+  `npm i <PATH OF YOUR PDF PLAYER LIBRARY>  ".....dist/pdf-player-v2" [from step 2]`
+
+ 3. For Production
+	 
+     npm install
+  
+######  Step 2: Include the Sunbird assets in angular.json 
+
+    "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/pdf-player-v2/node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/"
+              }
+            ],
+
+######  Step 3: Import the modules and components
+
+Import the NgModule for each component you want to use:
+
+    import { PdfPlayerV2Module } from 'pdf-player-v2';
+
+
+    @NgModule({
+	    ...
+	    imports: [ PdfPlayerV2Module,
+        CarouselModule.forRoot()],
+	    ...
+    })
+
+    export class TestAppModule { }
+
+# How to use pdf player 
+In your template add 
+
+	<sb-pdf-viewer [pdfConfig]="setPdfConfig" (sendMetadata)="pdfEventHandler($event)"></sb-pdf-viewer>
+
+## Input for library 
+
+    setPdfConfig = {
+          "src": URL of PDF,
+          "showOpenFileButton": Boolean,
+          "showPropertiesButton": Boolean,
+          "textLayer":Boolean,
+          "showHandToolButton":Boolean,
+          "useBrowserLocale":Boolean,
+          "showBookmarkButton":Boolean,
+          "showBorders":"Boolean",
+          "startFromPage":number,
+          "contextMenuAllowed":Boolean,
+          "showSidebarButton": Boolean,
+          "showFindButton": Boolean,
+          "showPagingButtons": Boolean,
+          "showZoomButtons": Boolean,
+          "showPresentationModeButton": Boolean,
+          "showPrintButton": Boolean,
+          "showDownloadButton": Boolean,
+          "showSecondaryToolbarButton": Boolean,
+          "showRotateButton": Boolean,
+          "showScrollingButton": Boolean,
+          "showSpreadButton": Boolean,
+        }
+
+## Output from library
+
+    {
+      "eventType": "HEARTBEAT | START | END | FAILED",
+      "metaData": {
+        "numberOfPagesVisited": number,
+        "totalNumberOfPages": number,
+        "currentPagePointer": number,
+        "pageDuration": [
+          {
+            "page": number,
+            "spentTime": time in millisecond
+          },
+          ........
+        ],
+        "sessionId": "",
+        "userPlayBehavior": []
+      }
+    }
