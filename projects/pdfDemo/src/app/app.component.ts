@@ -18,20 +18,21 @@ export class AppComponent implements OnInit {
     'showHandToolButton': true,
     'useBrowserLocale': true,
     'showBookmarkButton': false,
-    'showBorders': 'showBorders',
-    'startFromPage': localStorage.getItem('lastPageVisited') || 0,
+    'showBorders': true,
+    'startFromPage': Number(localStorage.getItem('lastPageVisited')) || 0,
     'contextMenuAllowed': true,
-    'showSidebarButton': true,
+    'showSidebarButton': false,
     'showFindButton': true,
     'showPagingButtons': true,
     'showZoomButtons': true,
     'showPresentationModeButton': false,
     'showPrintButton': true,
     'showDownloadButton': true,
-    'showSecondaryToolbarButton': true,
-    'showRotateButton': true,
-    'showScrollingButton': true,
-    'showSpreadButton': true,
+    'showSecondaryToolbarButton': false,
+    'showRotateButton': false,
+    'showScrollingButton': false,
+    'showSpreadButton': false,
+    'backgroundColor': '#00000'
     };
 
   ngOnInit() {
