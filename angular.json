@@ -37,6 +37,139 @@
           }
         }
       }
+    },
+    "pdfDemo": {
+      "root": "projects/pdfDemo/",
+      "sourceRoot": "projects/pdfDemo/src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/pdfDemo",
+            "index": "projects/pdfDemo/src/index.html",
+            "main": "projects/pdfDemo/src/main.ts",
+            "polyfills": "projects/pdfDemo/src/polyfills.ts",
+            "tsConfig": "projects/pdfDemo/tsconfig.app.json",
+            "assets": [
+              "projects/pdfDemo/src/favicon.ico",
+              "projects/pdfDemo/src/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/"
+              }
+            ],
+            "styles": [
+              "projects/pdfDemo/src/styles.css"
+            ],
+            "scripts": [],
+            "es5BrowserSupport": true
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/pdfDemo/src/environments/environment.ts",
+                  "with": "projects/pdfDemo/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "pdfDemo:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "pdfDemo:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "pdfDemo:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/pdfDemo/src/test.ts",
+            "polyfills": "projects/pdfDemo/src/polyfills.ts",
+            "tsConfig": "projects/pdfDemo/tsconfig.spec.json",
+            "karmaConfig": "projects/pdfDemo/karma.conf.js",
+            "styles": [
+              "projects/pdfDemo/src/styles.css"
+            ],
+            "scripts": [],
+            "assets": [
+              "projects/pdfDemo/src/favicon.ico",
+              "projects/pdfDemo/src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/pdfDemo/tsconfig.app.json",
+              "projects/pdfDemo/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "pdfDemo-e2e": {
+      "root": "projects/pdfDemo-e2e/",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/pdfDemo-e2e/protractor.conf.js",
+            "devServerTarget": "pdfDemo:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "pdfDemo:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/pdfDemo-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "pdf-player-v2"
