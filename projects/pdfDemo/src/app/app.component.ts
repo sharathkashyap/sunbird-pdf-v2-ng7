@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
     'showOpenFileButton': false,
     'showPropertiesButton': false,
     'textLayer': true,
-    'showHandToolButton': true,
+    'showHandToolButton': false,
     'useBrowserLocale': true,
     'showBookmarkButton': false,
     'showBorders': true,
@@ -42,6 +42,6 @@ export class AppComponent implements OnInit {
   pdfEventHandler(valueEmitted) {
       console.log(valueEmitted);
       this.pdfMetadataEvents = valueEmitted;
-      localStorage.setItem('lastPageVisited', this.pdfMetadataEvents['metaData']['numberOfPagesVisited']);
+      localStorage.setItem('lastPageVisited', this.pdfMetadataEvents['metaData']['currentPagePointer']);
   }
 }
