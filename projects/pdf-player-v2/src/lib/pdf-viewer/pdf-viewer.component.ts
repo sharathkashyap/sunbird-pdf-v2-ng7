@@ -27,64 +27,39 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
   private pdfPlayerStartTime: number;
 
   private pdfLastPageTime: number;
-  public pdfPlayerEvent: IPlayerEvent = {
-    eventType: '',
-    metaData: {
-      numberOfPagesVisited: 0,
-      totalNumberOfPages: 0,
-      currentPagePointer: 0,
-      pageDuration: [],
-      highlights: [],
-      sessionId: '',
-      userPlayBehavior: []
-    }
-  };
-
-  public messages: Array<string> = [];
-  public showBorders = false;
   public visits = [];
-  public _searchText = '';
-  public fontleftIcon: any;
-  public fontRightIcon: any;
-
-  getNavigationConfig = {
-    'isNavCtrl': true,
-    'alignment': 'top',
-    'isLeftEnable': true,
-    'isRightEnable': true,
-    'isFirstPage': true,
-    'isLastPage': false,
-    'leftIcon': '',
-    'rightIcon': '',
-    'leftIconUrl': 'https://cdn3.iconfinder.com/data/icons/up-side-down/100/49_right2-512.png',
-    'rightIconUrl': 'https://cdn3.iconfinder.com/data/icons/up-side-down/100/42_right-512.png',
-    'iconSize': 'fa-3x'
-  };
+  private pdfPlayerEvent: IPlayerEvent;
 
 
   constructor(
-    private ngxExtendedPdfViewerService: NgxExtendedPdfViewerService, navigationctrlComponent: navigationctrlComponent
-   ) { }
+    private ngxExtendedPdfViewerService: NgxExtendedPdfViewerService,
+  ) { }
 
   ngOnDestroy(): void {
-     this.setPlayerEvent('END', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
+    this.setPlayerEvent('END', 'END', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
   }
 
   ngOnInit(): void {
-    this.pdfPlayerStartTime = this.pdfLastPageTime =  new Date().getTime();
-    this.fontleftIcon = Icon.faAngleDoubleLeft;
-    this.fontRightIcon = Icon.faAngleDoubleRight;
+    this.pdfPlayerStartTime = this.pdfLastPageTime = new Date().getTime();
   }
 
 
-  public setPlayerEvent(eventType: string, numberOfPagesVisited: number, numberOfPages: number,
-    currentPage: number, pageDuration?: Array<object>,  highlights?: Array<object>) {
-    this.pdfPlayerEvent.eventType = eventType;
-    this.pdfPlayerEvent.metaData.numberOfPagesVisited = Number(numberOfPagesVisited) ;
-    this.pdfPlayerEvent.metaData.totalNumberOfPages = numberOfPages;
-    this.pdfPlayerEvent.metaData.currentPagePointer = currentPage;
-    this.pdfPlayerEvent.metaData.pageDuration = pageDuration;
-    this.pdfPlayerEvent.metaData.highlights = highlights;
+  public setPlayerEvent(eventType: string, eid: string, numberOfPagesVisited: number, numberOfPages: number,
+    currentPage: number, pageDuration?: Array<object>, highlights?: Array<object>) {
+    this.pdfPlayerEvent = {
+      eventType: eventType,
+      metaData: {
+        eid: eid,
+        numberOfPagesVisited: Number(pageDuration.length),
+        totalNumberOfPages: numberOfPages,
+        currentPagePointer: currentPage,
+        pageDuration: pageDuration,
+        highlights: highlights,
+        sessionId: '',
+        userPlayBehavior: [],
+      }
+    };
+
     this.sendMetadata.emit(this.pdfPlayerEvent);
   }
 
@@ -94,19 +69,11 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
   }
 
   public onPageRendered(event: PageRenderedEvent) {
-    this.currentPagePointer = event.pageNumber;
-    const tags = {
-      'page' : this.currentPagePointer,
-      'spentTime' : new Date().getTime() - this.pdfLastPageTime
-    };
-    this.visits.push (tags);
-    this.pdfLastPageTime = new Date().getTime();
-    this.setPlayerEvent('HEARTBEAT', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
-    // console.log(event);
+
   }
 
   public onPdfLoaded(event: PdfLoadedEvent): void {
-    this.setPlayerEvent('START', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
+    this.setPlayerEvent('START', 'START', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
     // console.log('onPdfLoaded PDF loaded with ' + event.pagesCount + ' pages');
   }
 
@@ -116,38 +83,60 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
   }
 
   public onPdfLoadFailed(error: Error): void {
-    this.setPlayerEvent('FAILED', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
-    // console.log('onPdfLoadFailed');
-    // console.log(error);
+    this.setPlayerEvent('FAILED', 'FAILED', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
+    console.log(error);
   }
 
   public onSourceChange(event: string) {
     // console.log('onSourceChange Source changed. The new file is ' + event);
   }
 
+  // On Zoom + and -
   public onZoomChange(event: any): void {
-    this.setPlayerEvent('HEARTBEAT', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
+    this.setPlayerEvent('HEARTBEAT', 'INTERACT', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
     // console.log('onZoomChange');
     // console.log(event);
   }
 
+  // Current Zoom factor
+  public selectedZoomFactor(event: any): void {
+    // console.log("selectedZoomFactor",event)
+  }
+
   public onTextLayerRendered(event: TextLayerRenderedEvent): void {
-    // console.log('onTextLayerRendered');
-    // console.log(event);
   }
 
+  // Handtool change
   public getSelect(event: any) {
-    // console.log(event);
+    this.setPlayerEvent('HEARTBEAT', 'INTERACT', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
   }
 
-
-  nextPage() {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.dispatch('nextpage');
-  }
-  prevPage() {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.dispatch('previouspage');
+  public onPdfDownloaded(event: PdfDownloadedEvent): void {
+    this.setPlayerEvent('HEARTBEAT', 'INTERACT', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
   }
 
+  public onAfterPrint() {
+    this.setPlayerEvent('HEARTBEAT', 'IMPRESSION', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
+  }
+
+  public onBeforePrint() {
+    // console.log("onBeforePrint",event);
+  }
+
+  public onRotationChange(event: any): void {
+    this.setPlayerEvent('HEARTBEAT', 'INTERACT', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
+  }
+
+  // On Page next and previous or scroll
+  public onPageChange(event: any): void {
+    this.currentPagePointer = event;
+    const tags = {
+      'page': this.currentPagePointer,
+      'spentTime': new Date().getTime() - this.pdfLastPageTime
+    };
+    this.pdfLastPageTime = new Date().getTime();
+    this.visits.push(tags);
+    this.setPlayerEvent('HEARTBEAT', 'INTERACT', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
+    this.setPlayerEvent('HEARTBEAT', 'IMPRESSION', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
+  }
 }

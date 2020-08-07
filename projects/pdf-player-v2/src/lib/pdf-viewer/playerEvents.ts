@@ -12,6 +12,7 @@ interface IPdfMetaData {
     highlights: Array<object>;
     sessionId: string;
     userPlayBehavior: Array<object>;
+    eid : string;
 }
 
 export interface PdfComponentInput {
