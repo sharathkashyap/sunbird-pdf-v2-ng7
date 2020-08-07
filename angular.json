@@ -56,6 +56,10 @@
             "assets": [
               "projects/pdfDemo/src/favicon.ico",
               "projects/pdfDemo/src/assets",
+              "projects/pdfDemo/src/assets/next.png",
+              "projects/pdfDemo/src/assets/back.png",
+              "projects/pdfDemo/src/assets/new_next.png",
+              "projects/pdfDemo/src/assets/new_back.png",
               {
                 "glob": "**/*",
                 "input": "node_modules/ngx-extended-pdf-viewer/assets/",
@@ -164,6 +168,41 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "projects/pdfDemo-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "navigationCtrl": {
+      "root": "projects/navigation-ctrl",
+      "sourceRoot": "projects/navigation-ctrl/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/navigation-ctrl/tsconfig.lib.json",
+            "project": "projects/navigation-ctrl/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/navigation-ctrl/src/test.ts",
+            "tsConfig": "projects/navigation-ctrl/tsconfig.spec.json",
+            "karmaConfig": "projects/navigation-ctrl/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/navigation-ctrl/tsconfig.lib.json",
+              "projects/navigation-ctrl/tsconfig.spec.json"
+            ],
             "exclude": [
               "**/node_modules/**"
             ]

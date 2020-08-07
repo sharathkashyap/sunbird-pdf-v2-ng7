@@ -1,3 +1,23 @@
+<navigation-ctrl [navConfig]="getNavigationConfig">
+    <div *ngIf="getNavigationConfig.isLeftEnable" class="leftBtn">
+        <div *ngIf="getNavigationConfig.leftIcon !=''" [ngClass]= "{'nav-alignment10':getNavigationConfig.alignment =='top','nav-alignment50':getNavigationConfig.alignment =='middle','nav-alignment85':getNavigationConfig.alignment =='bottom'}" class="navigation-left awesome-font">
+            <fa-icon (click)="prevPage()" [icon]="fontleftIcon"></fa-icon>
+                <ng-content select=".right"></ng-content>
+        </div>
+        <div *ngIf="getNavigationConfig.leftIcon ==='' && getNavigationConfig.leftIconUrl !=''" [ngClass]= "{'nav-alignment10':getNavigationConfig.alignment =='top','nav-alignment50':getNavigationConfig.alignment =='middle','nav-alignment85':getNavigationConfig.alignment =='bottom'}" class="navigation-left-img">
+            <img class="img-size" [src]="getNavigationConfig.leftIconUrl" (click)="prevPage()">
+        </div>
+    </div>
+    <div *ngIf="getNavigationConfig.isRightEnable" class="rightBtn">
+        <div *ngIf="getNavigationConfig.rightIcon !=''"  [ngClass]= "{'nav-alignment10':getNavigationConfig.alignment =='top','nav-alignment50':getNavigationConfig.alignment =='middle','nav-alignment85':getNavigationConfig.alignment =='bottom'}" class="navigation-right awesome-font">
+            <fa-icon (click)="nextPage()" [icon]="fontRightIcon"></fa-icon>
+        </div>
+        <div *ngIf="getNavigationConfig.rightIcon ==='' && getNavigationConfig.rightIconUrl !=''" [ngClass]= "{'nav-alignment10':getNavigationConfig.alignment =='top','nav-alignment50':getNavigationConfig.alignment =='middle','nav-alignment85':getNavigationConfig.alignment =='bottom'}" class="navigation-right-img">
+            <img class="img-size" [src]="getNavigationConfig.rightIconUrl" (click)="nextPage()">
+        </div>
+    </div>
+</navigation-ctrl>
+
 <ngx-extended-pdf-viewer 
 [src]="pdfConfig.src" 
 height="100vh"

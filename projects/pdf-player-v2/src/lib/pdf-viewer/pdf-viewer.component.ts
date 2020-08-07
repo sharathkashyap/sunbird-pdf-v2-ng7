@@ -1,12 +1,16 @@
 import { Component, OnInit, Input, HostListener, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { NgxExtendedPdfViewerService } from 'ngx-extended-pdf-viewer';
+import { navigationctrlComponent } from '../navigation-ctrl/navigation-ctrl.component'
 import {
   PagesLoadedEvent, PageRenderedEvent,
   PdfDownloadedEvent, PdfLoadedEvent, TextLayerRenderedEvent, ScaleChangingEvent
 } from 'ngx-extended-pdf-viewer/public_api';
 
 import { IPlayerEvent, PdfComponentInput } from './playerEvents';
+import { IPDFViewerApplication } from './playerEvents';
+import { navComponentInput } from './playerEvents';
 
+import * as Icon from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'sb-pdf-viewer',
   templateUrl: './pdf-viewer.component.html',
@@ -15,11 +19,13 @@ import { IPlayerEvent, PdfComponentInput } from './playerEvents';
 
 export class PdfViewerComponent implements OnInit, OnDestroy {
   @Input() pdfConfig: PdfComponentInput;
+  @Input() navConfig: navComponentInput;
   @Output() sendMetadata: EventEmitter<object> = new EventEmitter<IPlayerEvent>();
 
   private currentPagePointer: number;
   private totalNumberOfPages: number;
   private pdfPlayerStartTime: number;
+
   private pdfLastPageTime: number;
   public pdfPlayerEvent: IPlayerEvent = {
     eventType: '',
@@ -38,10 +44,26 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
   public showBorders = false;
   public visits = [];
   public _searchText = '';
+  public fontleftIcon: any;
+  public fontRightIcon: any;
+
+  getNavigationConfig = {
+    'isNavCtrl': true,
+    'alignment': 'top',
+    'isLeftEnable': true,
+    'isRightEnable': true,
+    'isFirstPage': true,
+    'isLastPage': false,
+    'leftIcon': '',
+    'rightIcon': '',
+    'leftIconUrl': 'https://cdn3.iconfinder.com/data/icons/up-side-down/100/49_right2-512.png',
+    'rightIconUrl': 'https://cdn3.iconfinder.com/data/icons/up-side-down/100/42_right-512.png',
+    'iconSize': 'fa-3x'
+  };
 
 
   constructor(
-    private ngxExtendedPdfViewerService: NgxExtendedPdfViewerService,
+    private ngxExtendedPdfViewerService: NgxExtendedPdfViewerService, navigationctrlComponent: navigationctrlComponent
    ) { }
 
   ngOnDestroy(): void {
@@ -50,6 +72,8 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.pdfPlayerStartTime = this.pdfLastPageTime =  new Date().getTime();
+    this.fontleftIcon = Icon.faAngleDoubleLeft;
+    this.fontRightIcon = Icon.faAngleDoubleRight;
   }
 
 
@@ -86,6 +110,7 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
     // console.log('onPdfLoaded PDF loaded with ' + event.pagesCount + ' pages');
   }
 
+
   public onScaleChange(event: ScaleChangingEvent): void {
     console.log(event);
   }
@@ -113,6 +138,16 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
 
   public getSelect(event: any) {
     // console.log(event);
+  }
+
+
+  nextPage() {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    PDFViewerApplication.eventBus.dispatch('nextpage');
+  }
+  prevPage() {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    PDFViewerApplication.eventBus.dispatch('previouspage');
   }
 
 }

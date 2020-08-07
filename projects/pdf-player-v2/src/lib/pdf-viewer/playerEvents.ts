@@ -38,3 +38,60 @@ export interface PdfComponentInput {
     showSpreadButton: boolean;
 }
 
+export interface navComponentInput {
+    isNavCtrl: boolean;
+    alignment: string;
+    isLeftEnable: boolean;
+    isRightEnable: boolean;
+    isFirstPage: boolean;
+    isLastPage: boolean;
+    leftIcon: string;
+    rightIcon: string;
+    iconSize: string;
+    leftIconUrl: string;
+    rightIconUrl: string;
+}
+export interface IEventBus {
+    _listeners: Map<string, (event: any) => void>;
+    on(eventName: string, listener: (event: any) => void);
+    off(eventName: string, listener: (event: any) => void);
+    dispatch(eventName: string, options?: any): void;
+}
+export interface IPDFViewerAppConfig {
+    defaultUrl: string;
+    filenameForDownload: string;
+    sidebarViewOnLoad: 0 | 1;
+}
+export interface IPDFViewer {
+    currentPageLabel: string | undefined;
+    currentPageNumber: number;
+    currentScaleValue: string | number;
+    pagesRotation: 0 | 90 | 180 | 270;
+    removePageBorders: boolean;
+    spreadMode: 0 | 1 | 2;
+  }
+export interface IPDFViewerApplication {
+    appConfig: IPDFViewerAppConfig;
+    _boundEvents: any;
+    enablePrint: boolean;
+    eventBus: IEventBus;
+    isViewerEmbedded: boolean;
+    onError: (error: Error) => void;
+    page: number;
+    pagesCount: number;
+    pdfDocument: any;
+    pdfLinkService: any;
+    pdfSidebar: any;
+    pdfViewer: IPDFViewer;
+    printKeyDownListener: undefined | ((this: Window, ev: KeyboardEvent) => any);
+    sidebarViewOnLoad: 0 | 1;
+    spreadModeOnLoad: 0 | 1 | 2;
+    secondaryToolbar: any;
+    toolbar: any;
+    viewer: HTMLDivElement;
+    cleanup(): void;
+    close(): void;
+    open(source: string | ArrayBuffer | {range: any} | any, options?: any): Promise<any>;
+    unbindEvents(): void;
+    unbindWindowEvents(): void;
+  }

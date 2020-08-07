@@ -1,18 +1,3 @@
-.arrow {
-    border: solid black;
-    border-width: 0 3px 3px 0;
-    padding: 10px;
-    background:none !important;
-    outline:none;
-}
-.right {
-    transform: rotate(-45deg);
-    -webkit-transform: rotate(-45deg);
-}
-.left {
-    transform: rotate(135deg);
-    -webkit-transform: rotate(135deg);
-}
 .navigation{
     z-index: 9999;
     position: relative;
@@ -32,9 +17,11 @@
 .img-size{
     height:6vw !important;
 }
+
 .awesome-font{
-    font-size:4vw !important;
+    font-size:5vw !important;
 }
+
 .nav-alignment50{
     top: 50%;
 }
