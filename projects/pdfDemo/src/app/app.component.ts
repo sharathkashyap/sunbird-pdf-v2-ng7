@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
   title = 'pdfDemo';
   pdfMetadataEvents: object;
   constructor() { }
-  getPdfConfig = {
+  pdfPlayerConfig = {
     'src': '/assets/gita.pdf',
     'showOpenFileButton': false,
     'showPropertiesButton': false,
@@ -32,8 +32,22 @@ export class AppComponent implements OnInit {
     'showRotateButton': false,
     'showScrollingButton': false,
     'showSpreadButton': false,
-    'backgroundColor': '#00000'
-    };
+    'backgroundColor': '#00000',
+    'navigationConf' : {
+      'isNavCtrl': true,
+      'alignment': 'middle',
+      'isLeftEnable': true,
+      'isRightEnable': true,
+      'isFirstPage': true,
+      'isLastPage': false,
+      'leftIcon': '',
+      'rightIcon': '',
+      'leftIconUrl': 'assets/back.png',
+      'rightIconUrl': 'assets/next.png',
+      'iconSize': 'fa-3x'
+
+    }
+};
 
   ngOnInit() {
 
@@ -43,5 +57,11 @@ export class AppComponent implements OnInit {
       console.log(valueEmitted);
       this.pdfMetadataEvents = valueEmitted;
       localStorage.setItem('lastPageVisited', this.pdfMetadataEvents['metaData']['currentPagePointer']);
+  }
+
+  public navigationHandler(event: any) {
+    event === 'next' ?
+    (window as any).PDFViewerApplication.eventBus.dispatch('nextpage') :
+    (window as any).PDFViewerApplication.eventBus.dispatch('previouspage');
   }
 }

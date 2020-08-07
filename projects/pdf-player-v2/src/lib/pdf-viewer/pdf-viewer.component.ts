@@ -1,16 +1,14 @@
 import { Component, OnInit, Input, HostListener, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { NgxExtendedPdfViewerService } from 'ngx-extended-pdf-viewer';
-import { navigationctrlComponent } from '../navigation-ctrl/navigation-ctrl.component'
+
 import {
   PagesLoadedEvent, PageRenderedEvent,
   PdfDownloadedEvent, PdfLoadedEvent, TextLayerRenderedEvent, ScaleChangingEvent
 } from 'ngx-extended-pdf-viewer/public_api';
 
-import { IPlayerEvent, PdfComponentInput } from './playerEvents';
-import { IPDFViewerApplication } from './playerEvents';
-import { navComponentInput } from './playerEvents';
+import { IPlayerEvent, PdfComponentInput, telEventType } from './playerEvents';
 
-import * as Icon from '@fortawesome/free-solid-svg-icons';
+
 @Component({
   selector: 'sb-pdf-viewer',
   templateUrl: './pdf-viewer.component.html',
@@ -19,32 +17,45 @@ import * as Icon from '@fortawesome/free-solid-svg-icons';
 
 export class PdfViewerComponent implements OnInit, OnDestroy {
   @Input() pdfConfig: PdfComponentInput;
-  @Input() navConfig: navComponentInput;
+
   @Output() sendMetadata: EventEmitter<object> = new EventEmitter<IPlayerEvent>();
 
-  private currentPagePointer: number;
-  private totalNumberOfPages: number;
-  private pdfPlayerStartTime: number;
-
-  private pdfLastPageTime: number;
-  public visits = [];
-  private pdfPlayerEvent: IPlayerEvent;
-
+  currentPagePointer: number;
+  totalNumberOfPages: number;
+  pdfPlayerStartTime: number;
+  pdfLastPageTime: number;
+  pdfPlayerEvent: IPlayerEvent;
+  messages: Array<string> = [];
+  showBorders = false;
+  visits = [];
+  _searchText = '';
+  fontLeftIcon: any;
+  fontRightIcon: any;
 
   constructor(
-    private ngxExtendedPdfViewerService: NgxExtendedPdfViewerService,
   ) { }
+
 
   ngOnDestroy(): void {
     this.setPlayerEvent('END', 'END', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
+    this.pdfViewerCleanUp();
   }
 
   ngOnInit(): void {
     this.pdfPlayerStartTime = this.pdfLastPageTime = new Date().getTime();
   }
 
+  private pdfViewerCleanUp() {
+    if ((window as any).PDFViewerApplication) {
+      (window as any).PDFViewerApplication.unbindEvents();
+      (window as any).PDFViewerApplication.unbindWindowEvents();
+      (window as any).PDFViewerApplication.cleanup();
+      (window as any).PDFViewerApplication.close();
+    }
+  }
 
-  public setPlayerEvent(eventType: string, eid: string, numberOfPagesVisited: number, numberOfPages: number,
+
+  public setPlayerEvent(eventType: string, eid: telEventType, numberOfPagesVisited: number, numberOfPages: number,
     currentPage: number, pageDuration?: Array<object>, highlights?: Array<object>) {
     this.pdfPlayerEvent = {
       eventType: eventType,
@@ -87,27 +98,20 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
     console.log(error);
   }
 
-  public onSourceChange(event: string) {
-    // console.log('onSourceChange Source changed. The new file is ' + event);
-  }
 
-  // On Zoom + and -
   public onZoomChange(event: any): void {
     this.setPlayerEvent('HEARTBEAT', 'INTERACT', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
-    // console.log('onZoomChange');
-    // console.log(event);
   }
 
-  // Current Zoom factor
-  public selectedZoomFactor(event: any): void {
+
+  public selectedZoomFactor(event: any) {
     // console.log("selectedZoomFactor",event)
   }
 
   public onTextLayerRendered(event: TextLayerRenderedEvent): void {
   }
 
-  // Handtool change
-  public getSelect(event: any) {
+  public getSelect(event: any): void {
     this.setPlayerEvent('HEARTBEAT', 'INTERACT', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
   }
 
@@ -115,11 +119,11 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
     this.setPlayerEvent('HEARTBEAT', 'INTERACT', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
   }
 
-  public onAfterPrint() {
+  public onAfterPrint(event: any) {
     this.setPlayerEvent('HEARTBEAT', 'IMPRESSION', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
   }
 
-  public onBeforePrint() {
+  public onBeforePrint(event: any): void {
     // console.log("onBeforePrint",event);
   }
 
@@ -139,4 +143,11 @@ export class PdfViewerComponent implements OnInit, OnDestroy {
     this.setPlayerEvent('HEARTBEAT', 'INTERACT', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
     this.setPlayerEvent('HEARTBEAT', 'IMPRESSION', this.currentPagePointer, this.totalNumberOfPages, this.currentPagePointer, this.visits);
   }
+
+  // public navigationHandler(event: any) {
+  //   event === 'next' ?
+  //   (window as any).PDFViewerApplication.eventBus.dispatch('nextpage') :
+  //   (window as any).PDFViewerApplication.eventBus.dispatch('previouspage');
+  // }
+
 }
