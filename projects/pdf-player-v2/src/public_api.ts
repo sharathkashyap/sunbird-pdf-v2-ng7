@@ -3,5 +3,8 @@
  */
 
 export * from './lib/pdf-player-v2.service';
-export * from './lib/pdf-player-v2.component';
 export * from './lib/pdf-player-v2.module';
+export * from './lib/pdf-player-v2.component';
+export * from './lib/pdf-viewer/pdf-viewer.component';
+
+
